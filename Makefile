@@ -384,6 +384,7 @@ otel-local:
 	docker run -d --name jaeger-desktop --restart=always -p 16686:16686 -p 4317:4317 -p 4318:4318 jaegertracing/jaeger:2.7.0
 	open http://localhost:16686/
 
+
 .PHONY: kind-debug
 kind-debug:
 	@echo "Debugging the kind cluster..."
@@ -406,3 +407,9 @@ report/image-cve: audit build
 	grype docker:$(CONTROLLER_IMG) -o template -t reports/cve-report.tmpl --file reports/$(SEMVER)/controller-cve.csv
 	grype docker:$(APP_IMG)        -o template -t reports/cve-report.tmpl --file reports/$(SEMVER)/app-cve.csv
 	grype docker:$(UI_IMG)         -o template -t reports/cve-report.tmpl --file reports/$(SEMVER)/ui-cve.csv
+
+.PHONY: ollama-install
+ollama-install:
+	docker rm -f ollama || true
+	make create-kind-cluster
+	bash ./scripts/kind/setup-ollama.sh
