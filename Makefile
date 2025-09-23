@@ -380,6 +380,11 @@ otel-local:
 	docker run -d --name jaeger-desktop --restart=always -p 16686:16686 -p 4317:4317 -p 4318:4318 jaegertracing/jaeger:2.7.0
 	open http://localhost:16686/
 
+.PHONY: ollama-local
+ollama-local:
+	docker rm -f ollama || true
+	bash ./scripts/kind/setup-ollama.sh
+
 .PHONY: kind-debug
 kind-debug:
 	@echo "Debugging the kind cluster..."
